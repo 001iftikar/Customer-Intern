@@ -1,7 +1,7 @@
 package com.iftikar.customerintern.domain.model
 
 data class User(
-    val id: String = "",
-    val email: String = "",
-    val name: String = ""
+    val id: String,
+    val email: String,
+    val name: String
 )

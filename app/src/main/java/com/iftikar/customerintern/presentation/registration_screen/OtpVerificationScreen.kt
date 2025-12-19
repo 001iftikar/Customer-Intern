@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -51,6 +52,7 @@ fun OtpVerificationScreen(
     onNavigateBack: () -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val event by viewModel.event.collectAsStateWithLifecycle(RegistrationScreensEvent.Idle)
     var text by remember(state.isVerificationSucceeded) { mutableStateOf(
         value = if (state.isVerificationSucceeded) {
             "Verification successful"
@@ -71,6 +73,13 @@ fun OtpVerificationScreen(
         if (timeLeft > 0) {
             delay(1000L)
             timeLeft--
+        }
+    }
+
+    LaunchedEffect(event) {
+        when(event) {
+            RegistrationScreensEvent.OnContinue -> onContinue()
+            else -> Unit
         }
     }
 
@@ -109,9 +118,15 @@ fun OtpVerificationScreen(
                 Spacer(Modifier.height(24.dp))
                 ButtonComponent(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Verify",
                     onClick = { onAction(RegistrationScreensAction.OnVerifyOtpClick) }
-                )
+                ) {
+                    Text(
+                        text = "Verify",
+                        style = MaterialTheme.typography.titleLarge,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
                 OtpResend(
                     modifier = Modifier.fillMaxWidth(),
                     timeLeft = timeText
@@ -119,8 +134,23 @@ fun OtpVerificationScreen(
             } else {
                 VerificationSuccessful(
                     modifier = Modifier.fillMaxWidth(),
-                    onClick = onContinue
-                )
+                    onClick = {
+                        onAction(RegistrationScreensAction.OnContinueClick)
+                    }
+                ) {
+                    if (!state.isLoading) {
+                        Text(
+                            text = "Continue",
+                            style = MaterialTheme.typography.titleLarge,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(8.dp)
+                        )
+                    } else {
+                        CircularProgressIndicator(
+                            color = Color.White
+                        )
+                    }
+                }
             }
         }
     }
@@ -210,13 +240,15 @@ private fun OtpResend(
 @Composable
 private fun VerificationSuccessful(
     modifier: Modifier = Modifier,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    content: @Composable () -> Unit
 ) {
     ButtonComponent(
         modifier = modifier,
-        text = "Continue",
         onClick = onClick
-    )
+    ) {
+        content()
+    }
 }
 
 

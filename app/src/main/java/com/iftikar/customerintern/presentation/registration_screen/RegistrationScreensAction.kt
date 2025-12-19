@@ -5,4 +5,5 @@ sealed interface RegistrationScreensAction {
     data class OnOtpChange(val otp: String) : RegistrationScreensAction
     data object OnSignInClick : RegistrationScreensAction
     data object OnVerifyOtpClick : RegistrationScreensAction
+    data object OnContinueClick : RegistrationScreensAction // after otp verification when continue button appears
 }

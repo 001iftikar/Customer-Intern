@@ -1,6 +1,5 @@
 package com.iftikar.customerintern.data.repository
 
-import android.util.Log
 import com.descope.Descope
 import com.descope.session.DescopeSession
 import com.descope.types.DeliveryMethod
@@ -54,17 +53,6 @@ class AuthRepositoryImpl @Inject constructor() : AuthRepository {
         } catch (ex: Exception) {
             Result.Error(DataError.Remote.UNKNOWN)
         }
-    }
-
-    override suspend fun checkSession() = withContext(Dispatchers.IO) {
-        val session = Descope.sessionManager.session
-        if (session != null && !session.refreshToken.isExpired) {
-            Log.d("Sign in- Session", "Session active")
-            Log.d("Sign in- Session", "${session.user.email}, ${session.user.userId}")
-        } else {
-            Log.d("Sign in- Session", "Session exppired")
-        }
-        Unit
     }
 }
 

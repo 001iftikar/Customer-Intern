@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.iftikar.customerintern.R
@@ -86,9 +87,15 @@ fun LandingScreen(
             Spacer(Modifier.height(1.dp))
             ButtonComponent(
                 modifier = Modifier.padding(horizontal = 24.dp),
-                text = "Get Started",
                 onClick = onNavigate
-            )
+            ) {
+                Text(
+                    text = "Get Started",
+                    style = MaterialTheme.typography.titleLarge,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
         }
     }
 }

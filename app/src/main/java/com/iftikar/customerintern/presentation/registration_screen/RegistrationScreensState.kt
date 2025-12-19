@@ -4,4 +4,6 @@ data class RegistrationScreensState(
     val email: String = "",
     val otp: String = "",
     val isVerificationSucceeded: Boolean = false,
+    val isLoading: Boolean = false,
+    val error: String? = null
 )
