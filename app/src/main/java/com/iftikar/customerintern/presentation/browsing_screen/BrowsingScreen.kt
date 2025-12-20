@@ -186,6 +186,20 @@ private fun Destinations(
             fontWeight = FontWeight.SemiBold
         )
 
+        if (destinations.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = "No destinations are active currently",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = LightOrange
+                )
+            }
+        }
+
         if (isLoading) {
             Box(
                 modifier = Modifier.fillMaxSize(),

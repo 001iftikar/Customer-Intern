@@ -29,6 +29,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -94,6 +95,11 @@ fun DestinationDetailsScreen(
 
     BackHandler {
         onNavigateBack()
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.getDestination(destinationId)
+        viewModel.getBooking(destinationId)
     }
 
     BottomSheetScaffold(

@@ -12,6 +12,7 @@ fun DestinationResponseDto.toDestination(): Destination {
         cost = cost.toString(),
         rating = rating.toString(),
         ratingCount = ratingCount.toString(),
+        isActive = isActive,
         imageUrl = imageUrl
     )
 }

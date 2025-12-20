@@ -8,5 +8,6 @@ data class DestinationResponseDto(
     val cost: Int = 0,
     val rating: Double = 0.0,
     val ratingCount: Int = 0,
+    val isActive: Boolean = false,
     val imageUrl: String = ""
 )

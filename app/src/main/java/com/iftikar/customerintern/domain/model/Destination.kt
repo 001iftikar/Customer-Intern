@@ -9,5 +9,6 @@ data class Destination(
     val cost: String = "",
     val rating: String = "",
     val ratingCount: String = "",
+    val isActive: Boolean = false,
     val imageUrl: String = "",
 )

@@ -75,11 +75,16 @@ class BookingRepositoryImpl @Inject constructor(
 
             val listenerRegistration = db
                 .collection(FirebaseCollections.DESTINATIONS)
+                .whereEqualTo("isActive", true)
                 .addSnapshotListener { snapshot, error ->
 
                     if (error != null) {
                         trySend(Result.Error(DataError.Remote.UNKNOWN))
                         return@addSnapshotListener
+                    }
+
+                    if (snapshot?.isEmpty == true) {
+                        trySend(Result.Success(emptyList<Destination>()))
                     }
 
                     if (snapshot != null) {
@@ -103,6 +108,7 @@ class BookingRepositoryImpl @Inject constructor(
                 .document(id)
                 .addSnapshotListener { snapshot, error ->
                     if (error != null) {
+                        Log.e("Destination", "getSpecificDestination: ", error)
                         trySend(Result.Error(DataError.Remote.UNKNOWN))
                         return@addSnapshotListener
                     }
