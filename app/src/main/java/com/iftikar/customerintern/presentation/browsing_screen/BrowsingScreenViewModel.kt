@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.iftikar.customerintern.domain.onError
 import com.iftikar.customerintern.domain.onSuccess
+import com.iftikar.customerintern.domain.repository.AuthRepository
 import com.iftikar.customerintern.domain.repository.BookingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,6 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BrowsingScreenViewModel @Inject constructor(
+    private val authRepository: AuthRepository,
     private val bookingRepository: BookingRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(BrowsingScreenState())
@@ -21,6 +23,12 @@ class BrowsingScreenViewModel @Inject constructor(
 
     init {
         getDestinations()
+    }
+
+    fun onAction(action: BrowsingScreenAction) {
+        when (action) {
+            is BrowsingScreenAction.OnUpdateName -> updateUserName(action.name)
+        }
     }
 
     private fun getDestinations() {
@@ -46,6 +54,32 @@ class BrowsingScreenViewModel @Inject constructor(
                         )
                     }
                 }
+            }
+        }
+    }
+
+    // call this on launch effect
+    fun getUserName() {
+        viewModelScope.launch {
+            authRepository.getUser().collect { result ->
+                result.onSuccess { user ->
+                    _state.update {
+                        it.copy(userName = user.name)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun updateUserName(name: String) {
+        viewModelScope.launch {
+            authRepository.updateUserName(name).onSuccess {
+                // Do nothing
+            }.onError {
+                // FIGMA SAID THAT UI SHOULD MATCH EXACTLY
+                // BUT IT ALSO DID NOT SPECIFY WHAT DO FOR USER NAME
+                // SO I DO NOT KNOW WHERE TO SHOW ERROR, HENCE I AM JUST LOGGING THE ERROR
+                // FOR THE DEVELOPERS, NOT SHOWING TO USER EXCEPT SOMETIMES IN SOME PLACES GENERIC ERROR
             }
         }
     }

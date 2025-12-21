@@ -21,17 +21,26 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.BookmarkBorder
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.LocationOn
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -55,6 +64,13 @@ fun BrowsingScreen(
     onClick: (String) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val onAction = viewModel::onAction
+    var popUpState by rememberSaveable { mutableStateOf(false) }
+    var editName by rememberSaveable { mutableStateOf("") }
+    LaunchedEffect(Unit) {
+        viewModel.getUserName()
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -62,7 +78,8 @@ fun BrowsingScreen(
                 modifier = Modifier
                     .systemBarsPadding()
                     .padding(start = 24.dp),
-                userName = "Usr Name"
+                userName = state.userName,
+                onClick = { popUpState = true }
             )
         }
     ) { innerPadding ->
@@ -77,18 +94,30 @@ fun BrowsingScreen(
             Destinations(
                 destinations = state.destinations,
                 isLoading = state.isLoading,
-                onClick = {onClick(it)}
+                onClick = { onClick(it) }
             )
         }
+        EditNamePopUp(
+            value = editName,
+            onValueChange = { editName = it },
+            state = popUpState,
+            onDismiss = { popUpState = false },
+            onConfirm = {
+                onAction(BrowsingScreenAction.OnUpdateName(editName))
+                popUpState = false
+            }
+        )
     }
 }
 
 @Composable
 private fun UserProfileCard(
     modifier: Modifier = Modifier,
-    userName: String
+    userName: String,
+    onClick: () -> Unit,
 ) {
     ElevatedCard(
+        onClick = onClick,
         modifier = modifier,
         colors = CardDefaults.elevatedCardColors(
             containerColor = CustomLightGray,
@@ -218,8 +247,9 @@ private fun Destinations(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 items(destinations) { destination ->
-                    DestinationItem(destination = destination,
-                        onClick = {onClick(destination.id)})
+                    DestinationItem(
+                        destination = destination,
+                        onClick = { onClick(destination.id) })
                 }
             }
         }
@@ -334,7 +364,51 @@ private fun DestinationItem(
     }
 }
 
-
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun EditNamePopUp(
+    modifier: Modifier = Modifier,
+    value: String,
+    onValueChange: (String) -> Unit,
+    state: Boolean,
+    onDismiss: () -> Unit,
+    onConfirm: () -> Unit
+) {
+    if (state)
+        BasicAlertDialog(
+            modifier = modifier,
+            onDismissRequest = onDismiss,
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(6.dp)
+            ) {
+                OutlinedTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    singleLine = true,
+                    placeholder = { Text(text = "Edit name", color = Color.White) },
+                    colors = TextFieldDefaults.colors(
+                        focusedContainerColor = CustomLightGray,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedContainerColor = CustomLightGray,
+                        unfocusedIndicatorColor = Color.Transparent
+                    )
+                )
+                Row(
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    Button(
+                        onClick = onConfirm
+                    ) {
+                        Text(
+                            text = "Confirm"
+                        )
+                    }
+                }
+            }
+        }
+}
 
 
 
