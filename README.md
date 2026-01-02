@@ -43,7 +43,7 @@ The app allows users to log in using email OTP, browse available destinations, a
 - **Architecture:** MVVM
 - **State Management:** StateFlow
 - **Backend:** Firebase Firestore
-- **Authentication:** Email OTP (Firebase-compatible flow)
+- **Authentication:** Email OTP (Descope Email OTP Auth)
 - **Async:** Kotlin Coroutines & Flow
 
 ---
