@@ -10,21 +10,22 @@ The app allows users to log in using email OTP, browse available destinations, a
 - **Email OTP Login**
   - Users authenticate using email-based OTP.
     <div align="center">
-  <img src="images/SignIn.jpg" alt="Sign In" width="40%" />
-  <img src="images/Verification.jpg" alt="Verification" width="40%" />
+  <img src="images/SignIn.jpg" alt="Sign In" width="20%" />
+  <img src="images/Verification.jpg" alt="Verification" width="20%" />
 </div>
+
 - **Browse Destinations**
   - Horizontally scrollable destination cards.
-  <img src="images/Home.jpg" alt="Teachers Screen" width="40%"/>
+  <img src="images/Home.jpg" alt="Teachers Screen" width="20%"/>
 - **Destination Details**
   - View detailed information about a selected destination.
-  <img src="images/Details.jpg" alt="Teachers Screen" width="40%"/>
+  <img src="images/Details.jpg" alt="Teachers Screen" width="20%"/>
 - **Book Now**
   - Users can send a booking request for a destination.
-  <img src="images/Booking_Requesting.jpg" alt="Teachers Screen" width="40%"/>
+  <img src="images/Booking_Requesting.jpg" alt="Teachers Screen" width="20%"/>
 - **Real-time Status Updates**
   - Booking status (`Requesting / Accepted / Rejected`) updates instantly without full screen refresh.
-  <img src="images/Booking_Accepted.jpg" alt="Teachers Screen" width="40%"/>
+  <img src="images/Booking_Accepted.jpg" alt="Teachers Screen" width="20%"/>
 
 ---
 
